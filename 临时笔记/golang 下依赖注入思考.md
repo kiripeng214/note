@@ -10,3 +10,4 @@
 ## golang 实现的方式
 - 通过反射进行初始化，缺点是在运行的时候才知道问题（比如 uber 的 dig 和 Facebook inject）。
 - 通过 generate 进行代码生成，典型代表就是 wire，优点就是在运行前就知道问题性，而且生成代码跟手写并无区别，可以直白看得出来
+- 当然因为 wire 生成的机制，需要符合 (struct,error) 或者 (struct,func(),error) 的才能准确推导出在哪里生成。
