@@ -9,7 +9,7 @@ import (
 	"errors"
 )
 
-func GenEcdsaPrivateKey() (privateKeyStr string, publicKeyStr string, err error) {
+func GenPrivateKey() (privateKeyStr string, publicKeyStr string, err error) {
 	privateKey, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
 	if err != nil {
 		return "", "", err
@@ -38,7 +38,7 @@ func GenEcdsaPrivateKey() (privateKeyStr string, publicKeyStr string, err error)
 	return privateKeyStr, publicKeyStr, nil
 }
 
-func EcdsaPublicKeyFromStr(str string) (*ecdsa.PublicKey, error) {
+func PublicKeyFromStr(str string) (*ecdsa.PublicKey, error) {
 	block, _ := pem.Decode([]byte(str))
 	if block == nil {
 		return nil, errors.New("ErrAuthKeyNotPem")
