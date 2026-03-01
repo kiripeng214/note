@@ -2,10 +2,8 @@ package financial_state
 
 import (
 	"encoding/csv"
-	"fmt"
 	"io"
 	"os"
-	"strconv"
 
 	"github.com/go-echarts/go-echarts/v2/charts"
 	"github.com/go-echarts/go-echarts/v2/opts"
@@ -14,7 +12,7 @@ import (
 )
 
 func FinancialStateCmd(cmd *cobra.Command, args []string) {
-	states, err := readCsv(FileStr)
+	headers, states, err := readCsv(FileStr)
 	if err != nil {
 		panic(err)
 	}
@@ -28,12 +26,8 @@ func FinancialStateCmd(cmd *cobra.Command, args []string) {
 			Subtitle: "净资产",
 		}),
 	)
-	var x []string
-	for i := 0; i < 12; i++ {
-		x = append(x, strconv.Itoa(i+1)+"月")
-	}
 	for _, state := range states {
-		line.SetXAxis(x).AddSeries(state.Title, state.lineDatas)
+		line.SetXAxis(headers).AddSeries(state.Title, state.lineDatas)
 	}
 	createFile, err := os.Create(OutStr)
 	if err != nil {
@@ -42,27 +36,31 @@ func FinancialStateCmd(cmd *cobra.Command, args []string) {
 	_ = line.Render(createFile)
 }
 
-func readCsv(path string) ([]FinancialState, error) {
+func readCsv(path string) ([]string, []FinancialState, error) {
 	file, err := os.Open(path)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	defer file.Close()
 
 	reader := csv.NewReader(file)
 
 	financialStates := make([]FinancialState, 0)
-
+	headers := make([]string, 0, 12)
 	for {
 		record, err := reader.Read()
 		if err == io.EOF {
 			break
 		}
 		if err != nil {
-			return nil, err
+			return nil, nil, err
 		}
-		if len(record) < 13 {
-			return nil, fmt.Errorf("数据不足13个，%v", record)
+		if len(record) == 0 {
+			continue
+		}
+		if len(headers) == 0 {
+			headers = record[1:]
+			continue
 		}
 		financialState := FinancialState{
 			Title:     record[0],
@@ -70,5 +68,5 @@ func readCsv(path string) ([]FinancialState, error) {
 		}
 		financialStates = append(financialStates, financialState)
 	}
-	return financialStates, nil
+	return headers, financialStates, nil
 }
