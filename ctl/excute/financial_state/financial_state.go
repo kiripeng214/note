@@ -2,7 +2,6 @@ package financial_state
 
 import (
 	"encoding/csv"
-	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -36,11 +35,11 @@ func FinancialStateCmd(cmd *cobra.Command, args []string) {
 	for _, state := range states {
 		line.SetXAxis(x).AddSeries(state.Title, state.lineDatas)
 	}
-	create, err := os.Create(OutStr)
+	createFile, err := os.Create(OutStr)
 	if err != nil {
 		panic(err)
 	}
-	_ = line.Render(create)
+	_ = line.Render(createFile)
 }
 
 func readCsv(path string) ([]FinancialState, error) {
@@ -63,7 +62,7 @@ func readCsv(path string) ([]FinancialState, error) {
 			return nil, err
 		}
 		if len(record) < 13 {
-			return nil, errors.New(fmt.Sprintf("数据不足13个，%v", record))
+			return nil, fmt.Errorf("数据不足13个，%v", record)
 		}
 		financialState := FinancialState{
 			Title:     record[0],
