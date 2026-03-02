@@ -11,6 +11,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var miniNumber = 13
+
 func FinancialStateCmd(cmd *cobra.Command, args []string) {
 	headers, states, err := readCsv(FileStr)
 	if err != nil {
@@ -46,7 +48,7 @@ func readCsv(path string) ([]string, []FinancialState, error) {
 	reader := csv.NewReader(file)
 
 	financialStates := make([]FinancialState, 0)
-	headers := make([]string, 0, 12)
+	headers := make([]string, 0, miniNumber-1)
 	for {
 		record, err := reader.Read()
 		if err == io.EOF {
@@ -62,9 +64,12 @@ func readCsv(path string) ([]string, []FinancialState, error) {
 			headers = record[1:]
 			continue
 		}
+		if len(record) < miniNumber {
+			continue
+		}
 		financialState := FinancialState{
 			Title:     record[0],
-			lineDatas: generateLineDatas(record[1:13]...),
+			lineDatas: generateLineDatas(record[1:miniNumber]...),
 		}
 		financialStates = append(financialStates, financialState)
 	}

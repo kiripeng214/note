@@ -3,3 +3,4 @@
 lib/echarts/*
 tmp/*
 .vscode/*
+.continue/*
