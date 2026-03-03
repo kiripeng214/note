@@ -13,7 +13,7 @@ import (
 
 var miniNumber = 13
 
-func FinancialStateCmd(cmd *cobra.Command, args []string) {
+func FinancialStateCmd(_ *cobra.Command, _ []string) {
 	headers, states, err := readCsv(FileStr)
 	if err != nil {
 		panic(err)
