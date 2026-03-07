@@ -27,7 +27,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./kafka_data:/kafka
     networks:
-      - fa-net
+      - ki-net
 networks:
   ki-net:
     external: true
