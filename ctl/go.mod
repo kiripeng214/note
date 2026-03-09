@@ -1,6 +1,6 @@
 module ctl
 
-go 1.26.0
+go 1.26.1
 
 require (
 	github.com/go-echarts/go-echarts/v2 v2.7.0
