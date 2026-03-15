@@ -25,7 +25,7 @@
              "dlvFlags": [
                 "--check-go-version=false"
             ],
-            "args":["serve","--config","/Users/zp/go/src/workspaces/job-backend/config/.application-vscode.yaml"]
+            "args":["serve","--config","/Users/xx/go/src/workspaces/job-backend/config/.application-vscode.yaml"]
         }
     ],
 }
